@@ -1,0 +1,95 @@
+@import url('https://fonts.googleapis.com/css?family=Lato:400,700,900');
+@import "./normalize.css";
+@import "./principal/home.css";
+@import "./como-funciona.css";
+@import "./ranking.css";
+/* #575757 */
+
+:root {
+    --cor-tema: #fe743f;
+    --cor-padrao: #575757;
+    --ranking-cor: #ffac00;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    font-family: 'Lato', sans-serif;
+}
+
+.unselectable {
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+.interna__voltar {
+    text-transform: uppercase;
+    font-size: .75rem;
+    text-decoration: none;
+    font-weight: bold;
+    color: var(--cor-padrao);
+    display: flex;
+    align-items: center;
+    padding-top: 1.667em;
+    padding-left: 1.167em;
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    background-color: white;
+    padding-bottom: .75em;
+}
+
+.interna__voltar>svg {
+    width: 1.334em;
+    height: auto;
+    margin-right: 0.6em;
+}
+
+.principal[data-role],
+.como-funciona[data-role],
+.ranking[data-role] {
+    min-height: 100vh;
+}
+
+.como-funciona[data-role],
+.ranking[data-role] {
+    transform: translateX(100%);
+    width: 100%;
+    transition: transform .4s;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: white;
+    height: 100%;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.como-funciona[aberto],
+.ranking[aberto] {
+    transform: translateX(0%);
+}
+
+[data-role=montador]>.escondivel {
+    transition: transform .3s ease;
+}
+
+[data-role=montador]::after {
+    display: block;
+    left: 0;
+    top: 0;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(0, 0, 0, .5);
+    content: '';
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .2s ease;
+}
+
+[data-role=montador].empurrar::after {
+    opacity: 1;
+}
+[data-role=montador].empurrar>.escondivel {
+    transform: translateX(-25%) scale(.9);
+}

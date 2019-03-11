@@ -1,0 +1,23 @@
+{
+  "name": "blogueiro",
+  "version": "0.0.1",
+  "description": "Template de blogueiros.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "parcel src/index.html --out-dir public",
+    "build": "./public && parcel build src/index.html --out-dir public --no-source-maps --detailed-report"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://git.dev.fermen.to/Fermen.to/blogueiro.git"
+  },
+  "author": "Rick Stanley",
+  "license": "ISC",
+  "devDependencies": {
+    "parcel-bundler": "^1.12.0"
+  },
+  "dependencies": {
+    "lit-html": "^1.0.0",
+    "prouter": "^9.0.1"
+  }
+}

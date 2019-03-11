@@ -1,0 +1,18 @@
+.como-funciona .titulo {
+    text-align: center;
+    font-weight: 900;
+    font-size: 1.25rem;
+    margin-bottom: 1.65em;
+    margin-top: 2em;
+}
+
+.como-funciona article {
+    color: var(--cor-padrao);
+}
+
+.como-funciona article p {
+    width: 87.5%;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 0.875rem;
+}

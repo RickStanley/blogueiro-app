@@ -1,0 +1,72 @@
+.ranking__estrelao {
+    width: 4.125em;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+
+.ranking__embrulho {
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+
+.ranking .titulo {
+    text-align: center;
+    color: var(--ranking-cor);
+    font-weight: 900;
+    margin: 0.3em auto 0.6em;
+    font-size: 1.25rem;
+}
+.ranking .texto-intro {
+    color: var(--cor-padrao);
+    font-size: 0.875rem;
+    line-height: 1.43;
+    width: 15.215em;
+    margin: 0 auto 2.429em;
+}
+
+.ranking__lista-titulo {
+    color: var(--ranking-cor);
+    font-weight: 900;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+}
+
+.ranking .lista {
+    padding: 0;
+    counter-reset: li;
+    list-style: none;
+    color: var(--cor-padrao);
+    font-size: 0.875rem;
+}
+
+.ranking .lista .item.destaque {
+    font-size: 1.125rem;
+    font-weight: 900;
+}
+
+.ranking .lista .item {
+    counter-increment: li;
+    margin-bottom: .25em;
+}
+
+li::before {
+    content: counter(li)'°';
+    display: inline-block;
+    font-weight: 900;
+    width: 1em;
+    margin-left: -1em;
+    margin-right: 0.2em;
+}
+
+.ranking .ver-mais {
+    background-color: transparent;
+    border: 0;
+    width: 1.563em;
+    padding: 0;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
