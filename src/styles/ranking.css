@@ -12,14 +12,14 @@
     text-align: center;
 }
 
-.ranking .titulo {
+.ranking__titulo--principal {
     text-align: center;
     color: var(--ranking-cor);
     font-weight: 900;
     margin: 0.3em auto 0.6em;
     font-size: 1.25rem;
 }
-.ranking .texto-intro {
+.ranking__texto-intro {
     color: var(--cor-padrao);
     font-size: 0.875rem;
     line-height: 1.43;
@@ -32,9 +32,11 @@
     font-weight: 900;
     font-size: 0.875rem;
     text-transform: uppercase;
+    margin-bottom: 0;
 }
 
-.ranking .lista {
+.ranking__lista {
+    margin: .5em auto;
     padding: 0;
     counter-reset: li;
     list-style: none;
@@ -42,26 +44,7 @@
     font-size: 0.875rem;
 }
 
-.ranking .lista .item.destaque {
-    font-size: 1.125rem;
-    font-weight: 900;
-}
-
-.ranking .lista .item {
-    counter-increment: li;
-    margin-bottom: .25em;
-}
-
-li::before {
-    content: counter(li)'°';
-    display: inline-block;
-    font-weight: 900;
-    width: 1em;
-    margin-left: -1em;
-    margin-right: 0.2em;
-}
-
-.ranking .ver-mais {
+.ranking__ver-mais {
     background-color: transparent;
     border: 0;
     width: 1.563em;
@@ -69,4 +52,23 @@ li::before {
     display: block;
     margin-left: auto;
     margin-right: auto;
+}
+
+.ranking__lista .item.destaque {
+    font-size: 1.125rem;
+    font-weight: 900;
+}
+
+.ranking__lista .item {
+    counter-increment: li;
+    margin-bottom: .25em;
+}
+
+.ranking__lista .item::before {
+    content: counter(li)'°';
+    display: inline-block;
+    font-weight: 900;
+    width: 1em;
+    margin-left: -1em;
+    margin-right: 0.2em;
 }

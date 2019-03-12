@@ -1,5 +1,5 @@
 .home .logo-cliente {
-    height: 270px;
+    height: 50vh;
     background-color: var(--cor-tema, var(--cor-padrao));
 }
 
@@ -29,7 +29,7 @@
 
 .home .carregar__icone {
     margin: 0 auto 0.5833em;
-    width: 2.5em;
+    width: 3.334em;
 }
 
 .home .como-funciona {
@@ -46,4 +46,75 @@
     bottom: 0;
     position: fixed;
     width: 3.75em;
+}
+
+.home .preview img {
+    display: block;
+    margin: auto;
+    max-height: 100%;
+}
+.home .preview {
+    display: flex;
+    height: 37vh;
+    background-color: var(--cor-tema, var(--cor-padrao));
+}
+.home .form-envio {
+    margin-top: 1.2em;
+    max-width: 87.5%;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+.home .form-envio input:focus,
+.home .form-envio textarea:focus {
+    outline-color: var(--cor-tema);
+    box-shadow: 0 0 6px 0 rgba(165, 165, 165, 0.8);
+}
+.home .form-envio input,
+.home .form-envio textarea {
+    background-color: white;
+    box-shadow: 0 0 6px 0 rgba(165, 165, 165, 0.5);
+    border-radius: 5px;
+    border: solid 1px #dddddd;
+    width: 100%;
+    display: block;
+    padding: 0.679em 0.5em;
+    margin-bottom: 0.5em;
+    color: #3e3e3e;
+    border: 0;
+    font-size: 0.875rem;
+    box-sizing: border-box;
+    caret-color: var(--cor-tema);
+}
+.home .form-envio label {
+    display: block;
+    font-weight: bold;
+    font-size: 0.75rem;
+    color: #4e4e4e;
+    margin-bottom: 0.5em;
+    text-align: left;
+}
+
+.btn {
+    background-color: transparent;
+    text-decoration: none;
+    flex-basis: 48%;
+    border: 0;
+    color: white;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 5px;
+    padding: 9px 0;
+}
+
+.btn.voltar {
+    background-color: #ababab;
+}
+
+.btn.enviar {
+    background-color: var(--cor-tema, --cor-padrao);
 }

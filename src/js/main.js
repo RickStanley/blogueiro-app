@@ -4,8 +4,15 @@ import {
 import {
     browserRouter
 } from "prouter";
-import homeTemplate from "./home";
-import { isApplicationPath } from "./routerUtils";
+import {
+    greetingTemplate,
+    sendTemplate
+} from "./home";
+import {
+    isApplicationPath
+} from "./routerUtils";
+import comoFuncionaTemplate from "./como-funciona";
+import rankingTemplate from "./ranking";
 
 function pronto(f) {
     /in/.test(document.readyState) ? setTimeout(pronto, 5, f) : f();
@@ -20,12 +27,19 @@ function são(criterio, contexto) {
 }
 
 pronto(() => {
+    const corTema = getComputedStyle(document.documentElement).getPropertyValue('--cor-tema');
+    if (corTema) {
+        const colorThemeMeta = document.createElement('meta');
+        colorThemeMeta.setAttribute('name', 'theme-color');
+        colorThemeMeta.setAttribute('content', corTema);
+        document.head.appendChild(colorThemeMeta);
+    }
     const CONFIG = {
         cliente: 'Fermen.to'
     };
-    const montador = é('[data-role=montador]'),
-        comoFunfa = é('[data-role=como-funciona]'),
-        ranking = é('[data-role=ranking]'),
+    const montador = é('#montador-principal'),
+        lateral = é('#lateral'),
+        montadorLateral = é('[data-role=montador-lateral]', lateral),
         router = browserRouter();
     const resetAny = () => {
         for (const aberto of são('[aberto]')) aberto.removeAttribute('aberto');
@@ -33,22 +47,34 @@ pronto(() => {
     };
     router
         .use('/', (req, resp) => {
-            render(homeTemplate(CONFIG), montador);
+            render(greetingTemplate(CONFIG), montador);
             resetAny();
+            resp.end();
+        })
+        .use('/enviar', (req, resp) => {
+            render(sendTemplate(), montador);
             resp.end();
         })
         .use('/como-funciona', (req, resp) => {
             montador.classList.add('empurrar');
-            comoFunfa.toggleAttribute('aberto');
+            lateral.toggleAttribute('aberto');
+            render(comoFuncionaTemplate(), montadorLateral);
             resp.end();
         })
         .use('/ranking', (req, resp) => {
             montador.classList.add('empurrar');
-            ranking.toggleAttribute('aberto');
+            lateral.toggleAttribute('aberto');
+            render(rankingTemplate(), montadorLateral);
             resp.end();
-        });
+        })
+        .use('/ranking/teste', (req, resp) => {
+            resp.end();
+        })
     router.listen();
 
+    document.addEventListener('imagem-lida', (event) => {
+        router.push('/enviar');
+    })
     // Manipulando links internos
     document.body.addEventListener('click', (evt) => {
         const target = evt.target;
