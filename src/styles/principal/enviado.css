@@ -1,0 +1,102 @@
+.home .resposta {
+    margin-top: 5.3125em;
+    width: 12.75em;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    color: var(--cor-tema, var(--cor-padrao));
+}
+
+.home .resposta h1 {
+    font-size: 1.25rem;
+    font-weight: 900;
+    line-height: 1.05;
+}
+
+.home .resposta hr {
+    background-color: #cecece;
+    height: 2px;
+    border: 0;
+}
+.home .resposta ~ .carregar {
+    margin: 5em auto;
+}
+.home .resposta ~ .btn {
+    width: 35%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+.home .resposta p {
+    color: var(--cor-padrao);
+    font-size: 1rem;
+}
+
+.checkmark-circle {
+    width: 3.875em;
+    height: 3.875em;
+    position: relative;
+    display: inline-block;
+    vertical-align: top;
+}
+
+.checkmark-circle .background {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: var(--cor-tema, var(--cor-padrao));
+    position: absolute;
+}
+
+.checkmark-circle .checkmark {
+    border-radius: 5px;
+}
+
+.checkmark-circle .checkmark.draw::after {
+    animation-delay: 100ms;
+    animation-duration: 1s;
+    animation-timing-function: ease;
+    animation-name: checkmark;
+    transform: scalex(-1) rotate(135deg);
+    animation-fill-mode: forwards;
+}
+
+.checkmark-circle .checkmark::after {
+    opacity: 1;
+    transform-origin: left top;
+    border-radius: 2.5px !important;
+    content: "";
+    position: absolute;
+    border-right: 0.5em solid white;
+    border-top: 0.5em solid white;
+    left: 12%;
+    top: 45%;
+    height: 50%;
+    width: 30%;
+}
+
+@keyframes checkmark {
+    0% {
+        height: 0;
+        width: 0;
+        opacity: 1;
+    }
+
+    20% {
+        height: 0;
+        width: 30%;
+        opacity: 1;
+    }
+
+    40% {
+        height: 50%;
+        width: 30%;
+        opacity: 1;
+    }
+
+    100% {
+        height: 50%;
+        width: 30%;
+        opacity: 1;
+    }
+}

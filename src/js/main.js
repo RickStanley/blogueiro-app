@@ -2,11 +2,13 @@ import {
     render
 } from "lit-html";
 import {
-    browserRouter
+    browserRouter,
+    routerGroup
 } from "prouter";
 import {
     greetingTemplate,
-    sendTemplate
+    sendTemplate,
+    doneTemplate
 } from "./home";
 import {
     isApplicationPath
@@ -35,46 +37,65 @@ pronto(() => {
         document.head.appendChild(colorThemeMeta);
     }
     const CONFIG = {
-        cliente: 'Fermen.to'
+        cliente: 'Fermen.to',
+        temImg: false
     };
-    const montador = é('#montador-principal'),
+    const montadorPrincipal = é('#montador-principal'),
         lateral = é('#lateral'),
         montadorLateral = é('[data-role=montador-lateral]', lateral),
-        router = browserRouter();
+        router = browserRouter(),
+        rankingRouterGroup = routerGroup();
     const resetAny = () => {
-        for (const aberto of são('[aberto]')) aberto.removeAttribute('aberto');
-        montador.classList.remove('empurrar');
+        lateral.removeAttribute('aberto');
+        CONFIG.temImg = false;
+        montadorPrincipal.classList.remove('empurrar');
     };
-    router
+    const abrirLateral = template => {
+        montadorPrincipal.classList.add('empurrar');
+        lateral.toggleAttribute('aberto', true);
+        render(template(), montadorLateral);
+    };
+    rankingRouterGroup
         .use('/', (req, resp) => {
-            render(greetingTemplate(CONFIG), montador);
-            resetAny();
+            abrirLateral(rankingTemplate);
             resp.end();
         })
-        .use('/enviar', (req, resp) => {
-            render(sendTemplate(), montador);
+        .use('/*', (req, resp) => {
+            render(rankingTemplate(req.params), montadorLateral);
+            resp.end();
+        });
+    router
+        .use('/', (req, resp, next) => {
+            render(greetingTemplate(CONFIG), montadorPrincipal);
+            resetAny();
+            next();
+        })
+        .use('/enviar', (req, resp, next) => {
+            if (CONFIG.temImg) {
+                render(sendTemplate(), montadorPrincipal);
+            } else router.push('/');
+            next();
+        })
+        .use('/resposta', (req, resp) => {
+            if (CONFIG.temImg) {
+                render(doneTemplate(), montadorPrincipal);
+            } else router.push('/');
             resp.end();
         })
         .use('/como-funciona', (req, resp) => {
-            montador.classList.add('empurrar');
-            lateral.toggleAttribute('aberto');
-            render(comoFuncionaTemplate(), montadorLateral);
+            abrirLateral(comoFuncionaTemplate);
             resp.end();
         })
-        .use('/ranking', (req, resp) => {
-            montador.classList.add('empurrar');
-            lateral.toggleAttribute('aberto');
-            render(rankingTemplate(), montadorLateral);
-            resp.end();
-        })
-        .use('/ranking/teste', (req, resp) => {
-            resp.end();
-        })
+        .use('/ranking', rankingRouterGroup);
     router.listen();
 
     document.addEventListener('imagem-lida', (event) => {
+        CONFIG.temImg = true;
         router.push('/enviar');
-    })
+    });
+    document.addEventListener('enviado', (event) => {
+        router.push('/resposta');
+    });
     // Manipulando links internos
     document.body.addEventListener('click', (evt) => {
         const target = evt.target;

@@ -17,7 +17,66 @@ function revoke() {
 
 function enviar(event) {
     event.preventDefault();
+    fetch('https://reqres.in/api/users', {
+            method: 'post',
+            body: JSON.stringify({
+                "name": "morpheus",
+                "job": "leader"
+            }),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(resp => {
+            document.dispatchEvent(new CustomEvent('enviado', {
+                detail: true
+            }))
+        })
+        .catch(reason => {
+            document.dispatchEvent(new CustomEvent('enviado', {
+                detail: false
+            }))
+        });
 }
+
+const carregar = novamente => html`
+<label class="carregar">
+    <svg class="carregar__icone" style="display: block;" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 40 40"><defs><path id="a" d="M.059.04h39.157V40H.059z"/></defs><g fill="none" fill-rule="evenodd"><mask id="b" fill="#fff"><use xlink:href="#a"/></mask><path fill="currentColor" d="M39.216 20c0 11.047-8.778 20-19.608 20S0 31.047 0 20 8.777 0 19.608 0c10.83 0 19.608 8.953 19.608 20z" mask="url(#b)"/><path stroke="#FFF" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M19.608 10.4v20M29.804 20H10.196"/></g></svg>
+    <span>${novamente ? 'CARREGAR MAIS' : 'CARREGAR FOTO'}</span>
+    <input @change=${lerArquivo} type="file" accept="image/*" style="display: none;">
+</label>`;
+
+function doneTemplate(sucesso) {
+    return html`
+    <div class="home">
+        <header class="resposta">
+        <div class="checkmark-circle">
+            <div class="background"></div>
+            <div class="checkmark draw"></div>
+        </div>
+        <h1>MUITO OBRIGADO!</h1>
+        <hr>
+        <p>A imagem foi enviada com sucesso!</p>
+        </header>
+        ${carregar(true)}
+        <a href="/" class="btn decorado">Início</a>
+    <div>
+    `
+}
+
+const isBackspace = key => key === 'Backspace' || key === 8;
+
+const inputInsta = function () {
+    if (!this.value.startsWith('@')) this.value = `@${this.value}`;
+};
+const preventFirst = function (e) {
+    const key = e.key || e.code ? e.key || e.code : e.which || e.keyCode;
+    if (this.value.length < 2 && isBackspace(key)) e.preventDefault();
+};
+
+const preventSelection = function (e) {
+    this.selectionStart = this.selectionEnd;
+    this.value = this.value;
+};
 
 function sendTemplate() {
     return html`
@@ -32,8 +91,8 @@ function sendTemplate() {
                 <label for="nome">Como você quer ser chamado?</label>
                 <input type="text" id="nome" name="nome" required>
                 <label for="instagram">Instagram</label>
-                <input type="text" id="instagram" name="instagram" required>
-                <a class="btn voltar" href="/">Cancelar</a><button class="btn enviar" type="submit">Enviar</button>
+                <input pattern="(?:@)([A-Za-z0-9_](?:(?:[A-Za-z0-9_]|(?:\.(?!\.))){0,28}(?:[A-Za-z0-9_]))?)" @focus=${preventSelection} @keyup=${inputInsta} @keydown=${preventFirst} type="text" id="instagram" name="instagram" required value="@">
+                <a class="btn btn-form" href="/">Cancelar</a><button class="btn btn-form decorado" type="submit">Enviar</button>
             </form>
         </div>
     </div>
@@ -50,11 +109,7 @@ function greetingTemplate(CONFIG) {
                 <br>
                 Utilize essa plataforma para compartilhar seus momentos!
             </p>
-            <label class="carregar">
-                <svg class="carregar__icone" style="display: block;" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 40 40"><defs><path id="a" d="M.059.04h39.157V40H.059z"/></defs><g fill="none" fill-rule="evenodd"><mask id="b" fill="#fff"><use xlink:href="#a"/></mask><path fill="currentColor" d="M39.216 20c0 11.047-8.778 20-19.608 20S0 31.047 0 20 8.777 0 19.608 0c10.83 0 19.608 8.953 19.608 20z" mask="url(#b)"/><path stroke="#FFF" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M19.608 10.4v20M29.804 20H10.196"/></g></svg>
-                <span>CARREGAR FOTO</span>
-                <input @change=${lerArquivo} type="file" accept="image/*" style="display: none;">
-            </label>
+            ${carregar()}
             <a class="como-funciona" href="/como-funciona">como funciona?</a>
         </div>
         <a class="ranking" href="/ranking">
@@ -65,5 +120,6 @@ function greetingTemplate(CONFIG) {
 
 export {
     greetingTemplate,
-    sendTemplate
+    sendTemplate,
+    doneTemplate
 };
