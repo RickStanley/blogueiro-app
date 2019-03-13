@@ -20,7 +20,7 @@ import {
     lockyOn
 } from "dom-locky";
 
-function hexToRgb(hex) {
+function hexParaRgb(hex) {
     var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
     return result ? {
         r: parseInt(result[1], 16),
@@ -43,7 +43,7 @@ function são(criterio, contexto) {
 
 function definirCor(corTema) {
     const colorThemeMeta = document.createElement('meta'),
-            rgb = hexToRgb(corTema);
+        rgb = hexParaRgb(corTema);
     colorThemeMeta.setAttribute('name', 'theme-color');
     colorThemeMeta.setAttribute('content', corTema);
     document.head.appendChild(colorThemeMeta);
@@ -51,18 +51,36 @@ function definirCor(corTema) {
     document.documentElement.style.setProperty("--cor-tema-rgb", `${rgb.r},${rgb.g},${rgb.b}`);
 }
 
+// Toggle Attribute polifll
+if (!Element.prototype.toggleAttribute) {
+    Element.prototype.toggleAttribute = function (name, force) {
+        if (force !== void 0) force = !!force
+        if (this.getAttribute(name) !== null) {
+            if (force) return true;
+            this.removeAttribute(name);
+            return false;
+        } else {
+            if (force === false) return false;
+            this.setAttribute(name, "");
+            return true;
+        }
+    };
+}
+
 pronto(() => {
     const CONFIG = {
         cliente: '',
         temImg: false
     };
+    definirCor(process.env.COR);
+    CONFIG.cliente = process.env.CLIENTE;
     // const corTema = getComputedStyle(document.documentElement).getPropertyValue('--cor-tema');
     // if (corTema) definirCor(corTema);
-    fetch(`${process.env.API_HOST}/config/${process.env.CLIENTE}`).then(resp => resp.json()).then(dados => {
-        definirCor(dados.cor);
-        CONFIG.cliente = dados.nome;
-        if (router.getPath() === '/') render(greetingTemplate(CONFIG), montadorPrincipal);
-    });
+    // fetch(`${process.env.API_HOST}/config/${process.env.CLIENTE}`).then(resp => resp.json()).then(dados => {
+    //     definirCor(dados.cor);
+    //     CONFIG.cliente = dados.nome;
+    //     if (router.getPath() === '/') render(greetingTemplate(CONFIG), montadorPrincipal);
+    // });
     let unlock = null;
     const montadorPrincipal = é('#montador-principal'),
         lateral = é('#lateral'),
@@ -73,18 +91,18 @@ pronto(() => {
         lateral.removeAttribute('aberto');
         CONFIG.temImg = false;
         montadorPrincipal.classList.remove('empurrar');
-        if (unlock) unlock();
+        if (unlock) unlock(), unlock = null;
     };
     const abrirLateral = template => {
         montadorPrincipal.classList.add('empurrar');
         lateral.toggleAttribute('aberto', true);
         render(template(), montadorLateral);
-        unlock = lockyOn(lateral);
+        if (!unlock) unlock = lockyOn(lateral);
     };
     rankingRouterGroup
-        .use('/', (req, resp) => {
+        .use('/', (req, resp, next) => {
             abrirLateral(rankingTemplate);
-            resp.end();
+            next();
         })
         .use('/*', (req, resp) => {
             render(rankingTemplate(req.params), montadorLateral);

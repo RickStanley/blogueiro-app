@@ -22,7 +22,7 @@ function enviar(event) {
     const formData = new FormData(this);
     formData.append('imagem', inputFile.files[0]);
     document.body.classList.add('spinner');
-    fetch(`${process.env.API_HOST}/upload/${process.env.CLIENTE}`, {
+    fetch(`${process.env.API_HOST}/upload/${process.env.CLIENTE_SHORT}`, {
         method: 'post',
         body: formData
     }).then(resp => {

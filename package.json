@@ -1,11 +1,11 @@
 {
   "name": "blogueiro",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Template de blogueiros.",
   "main": "index.js",
   "scripts": {
     "dev": "parcel src/index.html --out-dir public",
-    "build": "./public && parcel build src/index.html --out-dir public --no-source-maps --detailed-report"
+    "build": "parcel build src/index.html --out-dir public --no-source-maps --detailed-report"
   },
   "repository": {
     "type": "git",

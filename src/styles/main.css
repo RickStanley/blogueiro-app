@@ -69,10 +69,12 @@ body {
     background-color: white;
     height: 100%;
     overflow: auto;
+    pointer-events: none;
     -webkit-overflow-scrolling: touch;
 }
 
 .lateral[aberto] {
+    pointer-events: all;
     transform: translateX(0%);
 }
 
