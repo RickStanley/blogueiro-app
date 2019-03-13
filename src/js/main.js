@@ -1,4 +1,5 @@
-require('dotenv').config();
+const ENV = require('../../env.json');
+
 import {
     render
 } from "lit-html";
@@ -72,8 +73,8 @@ pronto(() => {
         cliente: '',
         temImg: false
     };
-    definirCor(process.env.COR);
-    CONFIG.cliente = process.env.CLIENTE;
+    definirCor(ENV.COR);
+    CONFIG.cliente = ENV.CLIENTE;
     // const corTema = getComputedStyle(document.documentElement).getPropertyValue('--cor-tema');
     // if (corTema) definirCor(corTema);
     // fetch(`${process.env.API_HOST}/config/${process.env.CLIENTE}`).then(resp => resp.json()).then(dados => {
