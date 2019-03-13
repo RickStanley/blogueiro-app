@@ -94,8 +94,8 @@ const listas = [{
 const listaTemplate = lista => html`
     <h3 class="ranking__lista-titulo">${lista.nome}</h3>
     <ol class="ranking__lista">
-        ${repeat(lista.pessoas, i => html`
-            <li class="item">${i.nome} / ${i.total}</li>
+        ${repeat(lista.pessoas, (pessoa, index) => html`
+            <li class="item ${index === 0 ? 'destaque' : ''}">${pessoa.nome} / ${pessoa.total}</li>
         `)}
     </ol>`;
 const listasTemplate = lista => html`
