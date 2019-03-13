@@ -1,5 +1,4 @@
-const ENV = require('../../env.json');
-
+import * as ENV from "../../env.json";
 import {
     render
 } from "lit-html";
@@ -75,13 +74,6 @@ pronto(() => {
     };
     definirCor(ENV.COR);
     CONFIG.cliente = ENV.CLIENTE;
-    // const corTema = getComputedStyle(document.documentElement).getPropertyValue('--cor-tema');
-    // if (corTema) definirCor(corTema);
-    // fetch(`${process.env.API_HOST}/config/${process.env.CLIENTE}`).then(resp => resp.json()).then(dados => {
-    //     definirCor(dados.cor);
-    //     CONFIG.cliente = dados.nome;
-    //     if (router.getPath() === '/') render(greetingTemplate(CONFIG), montadorPrincipal);
-    // });
     let unlock = null;
     const montadorPrincipal = é('#montador-principal'),
         lateral = é('#lateral'),
@@ -156,4 +148,7 @@ pronto(() => {
         evt.preventDefault();
         router.push(url);
     });
+
+    // Teste para ativar evento :focus ou :hover no iOs
+    if (/(iPad|iPhone|iPod)/g.test(navigator.userAgent)) (function(l){var i,s={touchend:function(){}};for(i in s)l.addEventListener(i,s)})(document);
 });
