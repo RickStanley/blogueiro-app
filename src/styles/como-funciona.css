@@ -17,3 +17,36 @@
     margin-right: auto;
     font-size: 0.875rem;
 }
+
+.como-funciona__article .passos svg text {
+    font-family: inherit;
+}
+
+.como-funciona__article .passos svg {
+    box-shadow: 1px 1px 8px 0 rgba(165, 165, 165, .5);
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 87.5%;
+}
+
+.como-funciona__article .passos li {
+    counter-increment: li;
+}
+.como-funciona__article .passos li::before {
+    content: counter(li)'°';
+    display: inline-block;
+    font-weight: 900;
+    width: 2em;
+    text-align: center;
+    line-height: 2.2;
+    box-shadow: 1px 1px 5px 0 rgba(165, 165, 165, .6);
+    color: white;
+    height: 2em;
+    border-radius: 50em;
+    background-color: var(--cor-tema, var(--cor-padrao));
+}
+.como-funciona__article .passos {
+    list-style: none;
+    padding: 0;
+}

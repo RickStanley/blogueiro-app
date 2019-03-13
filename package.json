@@ -1,6 +1,6 @@
 {
   "name": "blogueiro",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Template de blogueiros.",
   "main": "index.js",
   "scripts": {
@@ -17,6 +17,8 @@
     "parcel-bundler": "^1.12.0"
   },
   "dependencies": {
+    "dom-locky": "^1.0.0",
+    "dotenv": "^6.2.0",
     "lit-html": "^1.0.0",
     "prouter": "^9.0.1"
   }

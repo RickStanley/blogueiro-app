@@ -54,6 +54,40 @@ const listas = [{
                 total: 99
             }
         ]
+    },
+    {
+        endpoint: '/engajamento',
+        nome: 'Engajamento redes sociais',
+        pessoas: [{
+                nome: 'Luciana Romão',
+                total: 123
+            },
+            {
+                nome: 'Rick Stanley',
+                total: 69
+            },
+            {
+                nome: 'Luiz Junior',
+                total: 99
+            }
+        ]
+    },
+    {
+        endpoint: '/engajamento',
+        nome: 'Engajamento redes sociais',
+        pessoas: [{
+                nome: 'Luciana Romão',
+                total: 123
+            },
+            {
+                nome: 'Rick Stanley',
+                total: 69
+            },
+            {
+                nome: 'Luiz Junior',
+                total: 99
+            }
+        ]
     }
 ];
 

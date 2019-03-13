@@ -1,3 +1,4 @@
+require('dotenv').config();
 import {
     render
 } from "lit-html";
@@ -15,6 +16,18 @@ import {
 } from "./routerUtils";
 import comoFuncionaTemplate from "./como-funciona";
 import rankingTemplate from "./ranking";
+import {
+    lockyOn
+} from "dom-locky";
+
+function hexToRgb(hex) {
+    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16)
+    } : null;
+}
 
 function pronto(f) {
     /in/.test(document.readyState) ? setTimeout(pronto, 5, f) : f();
@@ -28,18 +41,29 @@ function são(criterio, contexto) {
     return (contexto || document).querySelectorAll(criterio);
 }
 
+function definirCor(corTema) {
+    const colorThemeMeta = document.createElement('meta'),
+            rgb = hexToRgb(corTema);
+    colorThemeMeta.setAttribute('name', 'theme-color');
+    colorThemeMeta.setAttribute('content', corTema);
+    document.head.appendChild(colorThemeMeta);
+    document.documentElement.style.setProperty("--cor-tema", corTema);
+    document.documentElement.style.setProperty("--cor-tema-rgb", `${rgb.r},${rgb.g},${rgb.b}`);
+}
+
 pronto(() => {
-    const corTema = getComputedStyle(document.documentElement).getPropertyValue('--cor-tema');
-    if (corTema) {
-        const colorThemeMeta = document.createElement('meta');
-        colorThemeMeta.setAttribute('name', 'theme-color');
-        colorThemeMeta.setAttribute('content', corTema);
-        document.head.appendChild(colorThemeMeta);
-    }
     const CONFIG = {
-        cliente: 'Fermen.to',
+        cliente: '',
         temImg: false
     };
+    // const corTema = getComputedStyle(document.documentElement).getPropertyValue('--cor-tema');
+    // if (corTema) definirCor(corTema);
+    fetch(`${process.env.API_HOST}/config/${process.env.CLIENTE}`).then(resp => resp.json()).then(dados => {
+        definirCor(dados.cor);
+        CONFIG.cliente = dados.nome;
+        if (router.getPath() === '/') render(greetingTemplate(CONFIG), montadorPrincipal);
+    });
+    let unlock = null;
     const montadorPrincipal = é('#montador-principal'),
         lateral = é('#lateral'),
         montadorLateral = é('[data-role=montador-lateral]', lateral),
@@ -49,11 +73,13 @@ pronto(() => {
         lateral.removeAttribute('aberto');
         CONFIG.temImg = false;
         montadorPrincipal.classList.remove('empurrar');
+        if (unlock) unlock();
     };
     const abrirLateral = template => {
         montadorPrincipal.classList.add('empurrar');
         lateral.toggleAttribute('aberto', true);
         render(template(), montadorLateral);
+        unlock = lockyOn(lateral);
     };
     rankingRouterGroup
         .use('/', (req, resp) => {

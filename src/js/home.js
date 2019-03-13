@@ -2,12 +2,14 @@ import {
     html
 } from "lit-html";
 
-var arquivoBlob = '';
+var arquivoBlob = '',
+    inputFile = null;
 
 function lerArquivo() {
     arquivoBlob = URL.createObjectURL(this.files[0]);
     if (arquivoBlob) {
         document.dispatchEvent(new CustomEvent('imagem-lida'));
+        inputFile = this;
     }
 }
 
@@ -17,21 +19,20 @@ function revoke() {
 
 function enviar(event) {
     event.preventDefault();
-    fetch('https://reqres.in/api/users', {
-            method: 'post',
-            body: JSON.stringify({
-                "name": "morpheus",
-                "job": "leader"
-            }),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }).then(resp => {
-            document.dispatchEvent(new CustomEvent('enviado', {
-                detail: true
-            }))
-        })
-        .catch(reason => {
+    const formData = new FormData(this);
+    formData.append('imagem', inputFile.files[0]);
+    document.body.classList.add('spinner');
+    fetch(`${process.env.API_HOST}/upload/${process.env.CLIENTE}`, {
+        method: 'post',
+        body: formData
+    }).then(resp => {
+        document.body.classList.remove('spinner');
+        document.dispatchEvent(new CustomEvent('enviado', {
+            detail: true
+        }));
+    })
+    .catch(reason => {
+        document.body.classList.remove('spinner');
             document.dispatchEvent(new CustomEvent('enviado', {
                 detail: false
             }))
@@ -59,8 +60,7 @@ function doneTemplate(sucesso) {
         </header>
         ${carregar(true)}
         <a href="/" class="btn decorado">Início</a>
-    <div>
-    `
+    <div>`
 }
 
 const isBackspace = key => key === 'Backspace' || key === 8;
@@ -76,6 +76,7 @@ const preventFirst = function (e) {
 const preventSelection = function (e) {
     this.selectionStart = this.selectionEnd;
     this.value = this.value;
+    this.setSelectionRange(this.value.length, this.value.length);
 };
 
 function sendTemplate() {
@@ -87,7 +88,7 @@ function sendTemplate() {
         <div class="baixo">
             <form class="form-envio" @submit=${enviar}>
                 <label for="descricao">Descrição</label>
-                <textarea rows="5" id="descricao" name="descricao" spellcheck placeholder="Conte um pouco sobre a foto. Dicas: Quando foi feita? Onde foi feita? O que você gostaria que todos vissem nela? Por que ela é tão legal?" required></textarea>
+                <textarea rows="4" id="descricao" name="descricao" spellcheck placeholder="Conte um pouco sobre a foto. Dicas: Quando foi feita? Onde foi feita? O que você gostaria que todos vissem nela? Por que ela é tão legal?" required></textarea>
                 <label for="nome">Como você quer ser chamado?</label>
                 <input type="text" id="nome" name="nome" required>
                 <label for="instagram">Instagram</label>
@@ -105,7 +106,7 @@ function greetingTemplate(CONFIG) {
         <header class="logo-cliente"></header>
         <div class="baixo unselectable">
             <p class="texto-intro">
-                Bem vindo ao Blogueiros <b id="cliente">${CONFIG.cliente}</b>.
+                Bem-vindo(a) ao Blogueiros <b id="cliente">${CONFIG && CONFIG.cliente}</b>.
                 <br>
                 Utilize essa plataforma para compartilhar seus momentos!
             </p>
