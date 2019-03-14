@@ -3,11 +3,13 @@
     margin: auto;
     max-height: 100%;
     object-fit: contain;
+    height: 100%;
+    width: 100%;
 }
 
 .home .preview {
-    display: flex;
-    height: 37vh;
+    height: 37%;
+    max-height: 37vh;
     background-color: var(--cor-padrao);
 }
 
@@ -62,4 +64,11 @@
     color: #4e4e4e;
     margin-bottom: 0.5em;
     text-align: left;
+}
+
+@media only screen and (orientation: landscape) {
+    .home .preview {
+        height: 37vh;
+        max-height: unset;
+    }
 }

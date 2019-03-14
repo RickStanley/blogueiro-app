@@ -16,7 +16,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 50vh;
+    height: 50%;
     background-color: var(--cor-tema, var(--cor-padrao));
 }
 
@@ -61,7 +61,7 @@
 
 .home .como-funciona {
     font-weight: bold;
-    color: #9b9b9b;
+    color: #525252;
     font-size: 0.75rem;
     display: block;
 }
@@ -95,10 +95,13 @@
     background-color: var(--cor-tema, --cor-padrao);
 }
 
+.tooltip > svg {
+    fill: var(--cor-tema, var(--cor-padrao));
+}
 .tooltip {
     position: relative;
-    margin: -0.1em auto 0 0.2em;
-    padding: 0 0.5em 0.4em;
+    margin: -0.4em auto 0 0em;
+    padding: 0 0.5em 0.3em;
     float: right;
 }
 
@@ -154,6 +157,12 @@
     -webkit-animation-name: bounceIn;
     animation-duration: .75s;
     animation-name: bounceIn;
+}
+
+@media only screen and (orientation: landscape) {
+    .home .logo-cliente {
+        height: 50vh;
+    }
 }
 
 @keyframes bounceIn {

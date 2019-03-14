@@ -101,8 +101,11 @@ function sendTemplate() {
             <form class="form-envio" @submit=${enviar}>
                 <label for="descricao">Descrição</label>
                 <div class="tooltip">
-                    <svg style="display: block;width: 0.6em;" xmlns="http://www.w3.org/2000/svg" style="isolation:isolate" viewBox="534.377 167.631 194.265 288.664"><path fill="#C5C5C5" d="M593.302 388h76.485v25.495h-76.485V388zm25.495 68.295h28.045l22.945-25.495h-76.485l25.495 25.495z"/><path fill="#FC0" fill-rule="evenodd" d="M728.473 254.055c0-48.482-37.942-86.424-86.424-86.424-2.108 0-29.511 2.108-29.511 2.108-44.266 6.324-77.992 42.158-77.992 84.316 0 2.108-4.216 33.727 29.51 63.238 14.756 14.755 31.619 50.589 33.727 61.129l2.108 2.108h63.237l2.108-4.216c2.108-10.54 18.971-46.374 33.727-61.129 33.726-27.403 29.51-59.022 29.51-61.13z"/></svg>
-                    <span class="tooltiptext">Dicas: Quando foi feita? Onde foi feita? O que você gostaria que todos vissem nela? Por que ela é tão legal?</span>
+                    <svg style="display: block; width: 1.2em;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"/><path d="M12 6a3.5 3.5 0 0 0-3.5 3.5 1 1 0 0 0 2 0A1.5 1.5 0 1 1 12 11a1 1 0 0 0-1 1v2a1 1 0 0 0 2 0v-1.16A3.49 3.49 0 0 0 12 6z"/>
+                        <circle cx="12" cy="17" r="1"/>
+                    </svg>
+                    <span class="tooltiptext unselectable">Dicas: Quando foi feita? Onde foi feita? O que você gostaria que todos vissem nela? Por que ela é tão legal?</span>
                 </div>
                 <textarea rows="4" id="descricao" name="descricao" spellcheck required placeholder="Conte um pouco sobre a foto"></textarea>
                 <label for="nome">Como você quer ser chamado?</label>

@@ -26,6 +26,11 @@ img {
     height: auto;
 }
 
+html,
+body {
+    height: 100%;
+}
+
 body {
     font-family: 'Lato', sans-serif;
 }
@@ -81,6 +86,7 @@ body {
 
 .principal {
     display: flex;
+    height: 100%;
     flex-direction: column;
 }
 
