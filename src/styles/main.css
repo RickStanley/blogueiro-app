@@ -8,6 +8,7 @@
 :root {
     --cor-padrao: #575757;
     --ranking-cor: #ffac00;
+    --erro-cor: #e01e1e;
     -webkit-tap-highlight-color: transparent;
 }
 
@@ -126,6 +127,7 @@ body {
     width: 100%;
     background-color: rgba(255, 255, 255, 0.5);
     cursor: wait;
+    z-index: 2;
 }
 
 .spinner::after {
@@ -142,4 +144,5 @@ body {
     border: 2px solid #ccc;
     border-top-color: var(--cor-tema, var(--cor-padrao));
     animation: spinner .6s linear infinite;
+    z-index: 2;
 }

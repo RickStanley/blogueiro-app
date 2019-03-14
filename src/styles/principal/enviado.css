@@ -18,15 +18,18 @@
     height: 2px;
     border: 0;
 }
-.home .resposta ~ .carregar {
+
+.home .resposta~.carregar {
     margin: 5em auto;
 }
-.home .resposta ~ .btn {
+
+.home .resposta~.btn {
     width: 35%;
     display: block;
     margin-left: auto;
     margin-right: auto;
 }
+
 .home .resposta p {
     color: var(--cor-padrao);
     font-size: 1rem;
@@ -38,6 +41,30 @@
     position: relative;
     display: inline-block;
     vertical-align: top;
+}
+
+.home .resposta.error h1 {
+    color: var(--erro-cor);
+}
+.home .resposta.error .checkmark-circle .background {
+    background-color: var(--erro-cor);
+}
+.home .resposta.error .checkmark-circle .checkmark::after {
+    height: unset;
+    left: 30%;
+    top: 40%;
+}
+
+.home .resposta.error .checkmark-circle .checkmark::before {
+    transform: scalex(-1) rotate(-135deg);
+    content: "";
+    left: 40%;
+    top: 71%;
+}
+
+.home .resposta.error .checkmark-circle .checkmark.draw::after,
+.home .resposta.error .checkmark-circle .checkmark.draw::before {
+    animation-name: x;
 }
 
 .checkmark-circle .background {
@@ -52,27 +79,32 @@
     border-radius: 5px;
 }
 
+.checkmark-circle .checkmark.draw::before,
 .checkmark-circle .checkmark.draw::after {
     animation-delay: 100ms;
     animation-duration: 1s;
     animation-timing-function: ease;
     animation-name: checkmark;
-    transform: scalex(-1) rotate(135deg);
     animation-fill-mode: forwards;
 }
 
-.checkmark-circle .checkmark::after {
-    opacity: 1;
-    transform-origin: left top;
-    border-radius: 2.5px !important;
-    content: "";
+.checkmark-circle .checkmark::after,
+.checkmark-circle .checkmark::before {
     position: absolute;
     border-right: 0.5em solid white;
     border-top: 0.5em solid white;
+    opacity: 1;
+    transform-origin: left top;
+    border-radius: 2.5px !important;
+    width: 30%;
+}
+
+.checkmark-circle .checkmark::after {
+    transform: scalex(-1) rotate(135deg);
+    content: "";
     left: 12%;
     top: 45%;
     height: 50%;
-    width: 30%;
 }
 
 @keyframes checkmark {
@@ -88,14 +120,27 @@
         opacity: 1;
     }
 
-    40% {
+    40%,
+    100% {
         height: 50%;
         width: 30%;
         opacity: 1;
     }
+}
 
+@keyframes x {
+    0% {
+        width: 0;
+        opacity: 1;
+    }
+
+    20% {
+        width: 30%;
+        opacity: 1;
+    }
+
+    40%,
     100% {
-        height: 50%;
         width: 30%;
         opacity: 1;
     }

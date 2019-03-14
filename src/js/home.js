@@ -1,10 +1,17 @@
 import {
     html
 } from "lit-html";
+import {
+    classMap
+} from "lit-html/directives/class-map";
 import * as ENV from "../../env.json";
 
 var arquivoBlob = '',
     inputFile = null;
+const respostaClass = {
+    resposta: true,
+    error: false
+};
 
 function lerArquivo() {
     arquivoBlob = URL.createObjectURL(this.files[0]);
@@ -18,6 +25,14 @@ function revoke() {
     URL.revokeObjectURL(this.src);
 }
 
+const atualizarResposta = houveSucesso => {
+    respostaClass.error = !houveSucesso;
+    document.body.classList.remove('spinner');
+    document.dispatchEvent(new CustomEvent('enviado', {
+        detail: houveSucesso
+    }));
+};
+
 function enviar(event) {
     event.preventDefault();
     try {
@@ -27,40 +42,33 @@ function enviar(event) {
     formData.append('imagem', inputFile.files[0]);
     document.body.classList.add('spinner');
     fetch(`${ENV.API_HOST}/upload/${ENV.CLIENTE_SHORT}`, {
-        method: 'post',
-        body: formData
-    }).then(resp => {
-        document.body.classList.remove('spinner');
-        document.dispatchEvent(new CustomEvent('enviado', {
-            detail: true
-        }));
-    })
-    .catch(reason => {
-        document.body.classList.remove('spinner');
-            document.dispatchEvent(new CustomEvent('enviado', {
-                detail: false
-            }))
-        });
+            method: 'post',
+            body: formData
+        }).then(resp => {
+            if (!resp.ok) throw new Error(resp.statusText);
+            atualizarResposta(true);
+        })
+        .catch(reason => atualizarResposta(false));
 }
 
 const carregar = novamente => html`
 <label class="carregar">
     <svg class="carregar__icone" style="display: block;" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 40 40"><defs><path id="a" d="M.059.04h39.157V40H.059z"/></defs><g fill="none" fill-rule="evenodd"><mask id="b" fill="#fff"><use xlink:href="#a"/></mask><path fill="currentColor" d="M39.216 20c0 11.047-8.778 20-19.608 20S0 31.047 0 20 8.777 0 19.608 0c10.83 0 19.608 8.953 19.608 20z" mask="url(#b)"/><path stroke="#FFF" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M19.608 10.4v20M29.804 20H10.196"/></g></svg>
-    <span>${novamente ? 'CARREGAR MAIS' : 'CARREGAR FOTO'}</span>
+    <span>${novamente ? (!respostaClass.error ? 'CARREGAR MAIS' : 'TENTAR NOVAMENTE') : 'CARREGAR FOTO'}</span>
     <input @change=${lerArquivo} type="file" accept="image/*" style="display: none;">
 </label>`;
 
-function doneTemplate(sucesso) {
+function doneTemplate() {
     return html`
     <div class="home">
-        <header class="resposta">
-        <div class="checkmark-circle">
-            <div class="background"></div>
-            <div class="checkmark draw"></div>
-        </div>
-        <h1>MUITO OBRIGADO!</h1>
-        <hr>
-        <p>A imagem foi enviada com sucesso!</p>
+        <header class=${classMap(respostaClass)}>
+            <div class="checkmark-circle">
+                <div class="background"></div>
+                <div class="checkmark draw"></div>
+            </div>
+            <h1>${!respostaClass.error ? 'MUITO OBRIGADO!' : 'Oops :('}</h1>
+            <hr>
+            <p>${!respostaClass.error ? 'A imagem foi enviada com sucesso!' : 'Ocorreu um erro ao tentar enviar sua foto, por favor tente novamente.'}</p>
         </header>
         ${carregar(true)}
         <a href="/" class="btn decorado">Início</a>
@@ -104,8 +112,7 @@ function sendTemplate() {
                 <a class="btn btn-form" href="/">Cancelar</a><button class="btn btn-form decorado" type="submit">Enviar</button>
             </form>
         </div>
-    </div>
-    `;
+    </div>`;
 }
 
 function greetingTemplate(CONFIG) {

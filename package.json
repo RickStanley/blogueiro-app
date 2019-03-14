@@ -1,6 +1,6 @@
 {
   "name": "blogueiro",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Template de blogueiros.",
   "main": "index.js",
   "scripts": {
