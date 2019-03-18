@@ -42,7 +42,7 @@ function são(criterio, contexto) {
 }
 
 function definirCor(corTema) {
-    const colorThemeMeta = document.createElement('meta'),
+    const colorThemeMeta = document.querySelector('[name=theme-color]') || document.createElement('meta'),
         rgb = hexParaRgb(corTema);
     colorThemeMeta.setAttribute('name', 'theme-color');
     colorThemeMeta.setAttribute('content', corTema);
