@@ -8,6 +8,7 @@ Template de Blogueiro para clientes.
     - `API_HOST`: HOST da API;
     - `COR`: cor tema do cliente;
     - `CLIENTE_SHORT`: nome curto que será usado nas chamadas da API;
+    - `COMO_FUNCIONA`: políticas de uso específico do cliente;
 
         Exemplo:
     ```json
@@ -15,7 +16,8 @@ Template de Blogueiro para clientes.
         "CLIENTE": "Fermen.to",
         "API_HOST": "https://blogueirinhos-api.dev.fermen.to",
         "COR": "#f8956c",
-        "CLIENTE_SHORT": "FRMNT"
+        "CLIENTE_SHORT": "FRMNT",
+        "COMO_FUNCIONA": "Usando Blogueiros Fermen.to, vocês expõe as pessoas."
     }
     ```
 2. Rode: `npm i` para instalar as dependências.
