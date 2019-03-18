@@ -28,12 +28,13 @@
 .home .texto-intro {
     color: var(--cor-padrao);
     line-height: 1.31;
-    width: 11.125em;
-    margin: 1.875em auto 2.125em;
+    width: 17em;
+    margin: 1.5em auto;
 }
 
 .home .texto-intro #cliente {
     color: var(--cor-tema, var(--cor-padrao));
+    white-space: nowrap;
 }
 
 .home .carregar {

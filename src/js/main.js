@@ -107,13 +107,13 @@ pronto(() => {
             resetAny();
             next();
         })
-        .use('/enviar', (req, resp, next) => {
+        .use('/envio', (req, resp, next) => {
             if (CONFIG.temImg) {
                 render(sendTemplate(), montadorPrincipal);
             } else router.push('/');
             next();
         })
-        .use('/resposta', (req, resp) => {
+        .use('/finalizado', (req, resp) => {
             if (CONFIG.temImg) {
                 render(doneTemplate(), montadorPrincipal);
             } else router.push('/');
@@ -128,10 +128,10 @@ pronto(() => {
 
     document.addEventListener('imagem-lida', (event) => {
         CONFIG.temImg = true;
-        router.push('/enviar');
+        router.push('/envio');
     });
     document.addEventListener('enviado', (event) => {
-        router.push('/resposta');
+        router.push('/finalizado');
     });
     // Manipulando links internos
     document.body.addEventListener('click', (evt) => {

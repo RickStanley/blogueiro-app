@@ -126,7 +126,7 @@ function greetingTemplate(CONFIG) {
             <p class="texto-intro">
                 Bem-vindo(a) ao Blogueiros <b id="cliente">${CONFIG && CONFIG.cliente}</b>.
                 <br>
-                Utilize essa plataforma para compartilhar seus momentos!
+                Seu conteúdo é muito importante pra gente: tire fotos, faça vídeos, registre momentos e seja um influenciador nas nossas redes.
             </p>
             ${carregar()}
             <a class="como-funciona" href="/como-funciona">como funciona?</a>
