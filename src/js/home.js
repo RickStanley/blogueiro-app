@@ -4,20 +4,25 @@ import {
 import {
     classMap
 } from "lit-html/directives/class-map";
+import { cache } from "lit-html/directives/cache";
 import * as ENV from "../../env.json";
 
-var arquivoBlob = '',
-    inputFile = null;
+var arquivo = {
+    arquivoBlob: '',
+    inputFile: null,
+    isImage: true
+};
 const respostaClass = {
     resposta: true,
     error: false
 };
 
 function lerArquivo() {
-    arquivoBlob = URL.createObjectURL(this.files[0]);
-    if (arquivoBlob) {
+    arquivo.arquivoBlob = URL.createObjectURL(this.files[0]); 
+    arquivo.isImage = /image\//.test(this.files[0].type) ? true : false;
+    if (arquivo.arquivoBlob) {
         document.dispatchEvent(new CustomEvent('imagem-lida'));
-        inputFile = this;
+        arquivo.inputFile = this;
     }
 }
 
@@ -39,7 +44,7 @@ function enviar(event) {
         document.activeElement.blur();
     } catch (error) {}
     const formData = new FormData(this);
-    formData.append('imagem', inputFile.files[0]);
+    formData.append('imagem', arquivo.inputFile.files[0]);
     document.body.classList.add('spinner');
     fetch(`${ENV.API_HOST}/upload/${ENV.CLIENTE_SHORT}`, {
             method: 'post',
@@ -91,12 +96,20 @@ const preventSelection = function (e) {
     this.setSelectionRange(this.value.length, this.value.length);
 };
 
+const previewContent = isImg => html`${cache(
+    isImg
+    ? html`<img src="${arquivo.arquivoBlob}" @load=${revoke}>`
+    : html`
+        <video controls style="width: 100%;height: 100%;">
+            <source src="${arquivo.arquivoBlob}" @load=${revoke}>
+        </video>
+    `
+)}`;
+
 function sendTemplate() {
     return html`
     <div class="home">
-        <header class="preview">
-            <img src="${arquivoBlob}" @load=${revoke}>
-        </header>
+        <header class="preview">${previewContent(arquivo.isImage)}</header>
         <div class="baixo">
             <form class="form-envio" @submit=${enviar}>
                 <label for="descricao">Descrição</label>

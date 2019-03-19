@@ -1,7 +1,7 @@
 {
     "name": "Blogueiros",
     "short_name": "Blogueiros",
-    "description": "Aplicativo para gravar o dia a dia das pessoas.",
+    "description": "Aplicativo para gravar momentos.",
     "start_url": "./index.html",
     "icons": [
         {
