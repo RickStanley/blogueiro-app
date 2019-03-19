@@ -7,7 +7,6 @@ import {
 import { cache } from "lit-html/directives/cache";
 import * as ENV from "../../env.json";
 import clienteImgs from "../assets/*{.png,.jpg}";
-console.log(ENV);
 
 var arquivo = {
     arquivoBlob: '',
