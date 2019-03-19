@@ -2,7 +2,7 @@
     "name": "Blogueiros",
     "short_name": "Blogueiros",
     "description": "Aplicativo para gravar momentos.",
-    "start_url": "./index.html",
+    "start_url": "./",
     "icons": [
         {
             "src": "/android-chrome-192x192.png",
