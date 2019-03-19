@@ -10,8 +10,10 @@ import * as ENV from "../../env.json";
 var arquivo = {
     arquivoBlob: '',
     inputFile: null,
-    isImage: true
-};
+    isImage: true,
+    file: null,
+    nome: ''
+}, torradaTimeout = null;
 const respostaClass = {
     resposta: true,
     error: false
@@ -20,6 +22,8 @@ const respostaClass = {
 function lerArquivo() {
     arquivo.arquivoBlob = URL.createObjectURL(this.files[0]); 
     arquivo.isImage = /image\//.test(this.files[0].type) ? true : false;
+    arquivo.nome = this.files[0].name;
+    arquivo.file = this.files[0];
     if (arquivo.arquivoBlob) {
         document.dispatchEvent(new CustomEvent('imagem-lida'));
         arquivo.inputFile = this;
@@ -31,6 +35,7 @@ function revoke() {
 }
 
 const atualizarResposta = houveSucesso => {
+    clearTimeout(torradaTimeout);
     respostaClass.error = !houveSucesso;
     document.body.classList.remove('spinner');
     document.dispatchEvent(new CustomEvent('enviado', {
@@ -44,8 +49,11 @@ function enviar(event) {
         document.activeElement.blur();
     } catch (error) {}
     const formData = new FormData(this);
-    formData.append('imagem', arquivo.inputFile.files[0]);
     document.body.classList.add('spinner');
+    formData.append('imagem', arquivo.file);
+    torradaTimeout = setTimeout(() => {
+        mostrarTorrada();
+    }, 2500);
     fetch(`${ENV.API_HOST}/upload/${ENV.CLIENTE_SHORT}`, {
             method: 'post',
             body: formData
@@ -59,8 +67,8 @@ function enviar(event) {
 const carregar = novamente => html`
 <label class="carregar">
     <svg class="carregar__icone" style="display: block;" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 40 40"><defs><path id="a" d="M.059.04h39.157V40H.059z"/></defs><g fill="none" fill-rule="evenodd"><mask id="b" fill="#fff"><use xlink:href="#a"/></mask><path fill="currentColor" d="M39.216 20c0 11.047-8.778 20-19.608 20S0 31.047 0 20 8.777 0 19.608 0c10.83 0 19.608 8.953 19.608 20z" mask="url(#b)"/><path stroke="#FFF" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M19.608 10.4v20M29.804 20H10.196"/></g></svg>
-    <span>${novamente ? (!respostaClass.error ? 'CARREGAR MAIS' : 'TENTAR NOVAMENTE') : 'CARREGAR FOTO'}</span>
-    <input @change=${lerArquivo} type="file" accept="image/*" style="display: none;">
+    <span>${novamente ? (!respostaClass.error ? 'CARREGAR MAIS' : 'TENTAR NOVAMENTE') : 'CARREGAR MÍDIA'}</span>
+    <input @change=${lerArquivo} type="file" accept="image/*,video/*" style="display: none;">
 </label>`;
 
 function doneTemplate() {
@@ -78,6 +86,14 @@ function doneTemplate() {
         ${carregar(true)}
         <a href="/" class="btn decorado">Início</a>
     <div>`
+}
+
+function mostrarTorrada() {
+    const torrada = document.querySelector('.torrada');
+    torrada.setAttribute('visivel', 'true');
+    setTimeout(() => {
+        torrada.removeAttribute('visivel');
+    }, 3000);
 }
 
 const isBackspace = key => key === 'Backspace' || key === 8;
@@ -109,6 +125,9 @@ const previewContent = isImg => html`${cache(
 function sendTemplate() {
     return html`
     <div class="home">
+        <div class="torrada">
+            <p>O envio pode demorar alguns segundos, dependendo do tamanho do arquivo e da velocidade de sua internet.</p>
+        </div>
         <header class="preview">${previewContent(arquivo.isImage)}</header>
         <div class="baixo">
             <form class="form-envio" @submit=${enviar}>

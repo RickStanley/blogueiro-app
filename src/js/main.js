@@ -150,7 +150,6 @@ pronto(() => {
     });    
     // Teste para ativar evento :focus ou :hover no iOs
     if (/(iPad|iPhone|iPod)/g.test(navigator.userAgent)) (function(l){var i,s={touchend:function(){}};for(i in s)l.addEventListener(i,s)})(document);
-
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('../sw.js').then(function(registration) {
             // Registration was successful

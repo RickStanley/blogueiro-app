@@ -1,6 +1,6 @@
 {
   "name": "blogueiro",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "Template de blogueiros.",
   "main": "index.js",
   "scripts": {
@@ -19,7 +19,6 @@
   "dependencies": {
     "dom-locky": "^1.0.0",
     "lit-html": "^1.0.0",
-    "pako": "^1.0.10",
     "prouter": "^9.0.1"
   }
 }

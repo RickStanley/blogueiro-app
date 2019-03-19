@@ -13,12 +13,14 @@ self.addEventListener('install', function (event) {
 });
 
 self.addEventListener('fetch', function (event) {
-    event.respondWith(
-        caches.match(event.request).then(function (response) {
-            return response || fetch(event.request);
-        })
-    );
-    event.waitUntil(update(event.request).then(refresh));
+    if (event.request.method !== 'POST') {        
+        event.respondWith(
+            caches.match(event.request).then(function (response) {
+                return response || fetch(event.request);
+            })
+        );
+        event.waitUntil(update(event.request).then(refresh));
+    }
 });
 
 function update(request) {

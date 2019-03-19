@@ -66,6 +66,31 @@
     text-align: left;
 }
 
+.home .torrada p {
+    margin: 0;
+    max-width: 19em;
+}
+
+.home .torrada {
+    background-color: tomato;
+    font-size: 0.75rem;
+    color: white;
+    box-sizing: border-box;
+    padding: 0.8em;
+    position: absolute;
+    border-radius: 5px;
+    display: inline-block;
+    right: 1em;
+    top: 1em;
+    transform: translateX(110%);
+    z-index: 5;
+    transition: transform .4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.home .torrada[visivel] {
+    transform: translateX(0%);
+}
+
 @media only screen and (orientation: landscape) {
     .home .preview {
         height: 37vh;
