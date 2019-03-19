@@ -4,3 +4,5 @@ node_modules
 public
 .env
 env.json
+src/assets/*
+!src/assets/.gitkeep

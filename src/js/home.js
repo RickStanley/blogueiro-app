@@ -6,6 +6,8 @@ import {
 } from "lit-html/directives/class-map";
 import { cache } from "lit-html/directives/cache";
 import * as ENV from "../../env.json";
+import clienteImgs from "../assets/*{.png,.jpg}";
+console.log(ENV);
 
 var arquivo = {
     arquivoBlob: '',
@@ -122,6 +124,21 @@ const previewContent = isImg => html`${cache(
     `
 )}`;
 
+const logoCarregada = function() {
+    this.classList.add('visivel');
+};
+
+const pegarIdentidade = tipo => {
+    switch (tipo) {
+        case 'logo':
+            return clienteImgs.cliente_logo || ENV.CLIENTE_LOGO || '';
+        case 'fundo':
+            return clienteImgs.cliente_fundo || ENV.CLIENTE_FUNDO || '';
+        default:
+            return '';
+    }
+}
+
 function sendTemplate() {
     return html`
     <div class="home">
@@ -153,7 +170,9 @@ function sendTemplate() {
 function greetingTemplate(CONFIG) {
     return html`
     <div class="escondivel home">
-        <header class="logo-cliente"></header>
+        <header class="logo-cliente" style="background-image: url(${pegarIdentidade('fundo')})">
+            <img src=${pegarIdentidade('logo')} @load=${logoCarregada}>
+        </header>
         <div class="baixo unselectable">
             <p class="texto-intro">
                 Bem-vindo(a) ao Blogueiros <b id="cliente">${CONFIG && CONFIG.cliente}</b>.
