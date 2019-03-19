@@ -93,7 +93,7 @@ function mostrarTorrada() {
     torrada.setAttribute('visivel', 'true');
     setTimeout(() => {
         torrada.removeAttribute('visivel');
-    }, 3000);
+    }, 4500);
 }
 
 const isBackspace = key => key === 'Backspace' || key === 8;
@@ -126,7 +126,7 @@ function sendTemplate() {
     return html`
     <div class="home">
         <div class="torrada">
-            <p>O envio pode demorar alguns segundos, dependendo do tamanho do arquivo e da velocidade de sua internet.</p>
+            <p>O envio pode demorar alguns segundos, dependendo do tamanho do arquivo e da velocidade da sua internet.</p>
         </div>
         <header class="preview">${previewContent(arquivo.isImage)}</header>
         <div class="baixo">
