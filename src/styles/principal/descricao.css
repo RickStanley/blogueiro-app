@@ -1,3 +1,4 @@
+@import "../loading.css";
 .home .preview img {
     display: block;
     margin: auto;
@@ -72,9 +73,10 @@
 }
 
 .home .torrada {
-    background-color: tomato;
+    background-color: #FEEFB3;
     font-size: 0.75rem;
-    color: white;
+    color: #704400;
+    box-shadow: 1px 1px 8px 0 rgba(79, 79, 79, 0.64);
     box-sizing: border-box;
     padding: 0.8em;
     position: fixed;

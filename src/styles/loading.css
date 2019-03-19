@@ -1,0 +1,49 @@
+body.enviando .progresso-wrapper .upload-progresso {
+    transform: rotate(-90deg) scale(1);
+}
+body.enviando .progresso-wrapper {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.progresso-wrapper {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    cursor: wait;
+    background-color: rgba(255, 255, 255, 0.5);
+    --progresso: 0;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .3s;
+}
+
+.upload-progresso {
+    transform: rotate(-90deg) scale(0);
+    width: 5em;
+    z-index: 2;
+    transition: transform .4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.progress-bar__background {
+    fill: none;
+    stroke: #e2eff0;
+    stroke-width: 1.8;
+}
+
+.progress-bar__progress {
+    fill: none;
+    stroke: #e2eff0;
+    stroke: var(--cor-tema, var(--cor-padrao));
+    stroke-dasharray: 100 100;
+    stroke-dashoffset: calc(100 - var(--progresso));
+    stroke-linecap: round;
+    stroke-width: 1.8;
+    transition: stroke-dashoffset 1s ease-in-out;
+}

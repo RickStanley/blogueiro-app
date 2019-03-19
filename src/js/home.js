@@ -4,24 +4,27 @@ import {
 import {
     classMap
 } from "lit-html/directives/class-map";
-import { cache } from "lit-html/directives/cache";
+import {
+    cache
+} from "lit-html/directives/cache";
 import * as ENV from "../../env.json";
 import clienteImgs from "../assets/*{.png,.jpg}";
 
 var arquivo = {
-    arquivoBlob: '',
-    inputFile: null,
-    isImage: true,
-    file: null,
-    nome: ''
-}, torradaTimeout = null;
+        arquivoBlob: '',
+        inputFile: null,
+        isImage: true,
+        file: null,
+        nome: ''
+    },
+    torradaTimeout = null;
 const respostaClass = {
     resposta: true,
     error: false
 };
 
 function lerArquivo() {
-    arquivo.arquivoBlob = URL.createObjectURL(this.files[0]); 
+    arquivo.arquivoBlob = URL.createObjectURL(this.files[0]);
     arquivo.isImage = /image\//.test(this.files[0].type) ? true : false;
     arquivo.nome = this.files[0].name;
     arquivo.file = this.files[0];
@@ -38,31 +41,58 @@ function revoke() {
 const atualizarResposta = houveSucesso => {
     clearTimeout(torradaTimeout);
     respostaClass.error = !houveSucesso;
-    document.body.classList.remove('spinner');
+    document.body.classList.remove('enviando');
     document.dispatchEvent(new CustomEvent('enviado', {
         detail: houveSucesso
     }));
 };
+
+function futch(url, opts, onProgress) {
+    if (!opts) opts = {};
+    return new Promise((res, rej) => {
+        var xhr = new XMLHttpRequest();
+        xhr.open(opts.method || 'get', url);
+        for (var k in opts.headers || {})
+            xhr.setRequestHeader(k, opts.headers[k]);
+        xhr.onload = e => {
+            if (e.target.status >= 200 && e.target.status <= 300) {
+                res(e.target);
+            } else {
+                rej(e);
+            }
+        };
+        xhr.onerror = rej;
+        if (xhr.upload && onProgress) xhr.upload.onprogress = onProgress;
+        xhr.send(opts.body);
+    });
+}
 
 function enviar(event) {
     event.preventDefault();
     try {
         document.activeElement.blur();
     } catch (error) {}
-    const formData = new FormData(this);
-    document.body.classList.add('spinner');
+    const formData = new FormData(this),
+            progresso = document.querySelector('.progresso-wrapper');
+    document.body.classList.add('enviando');
     formData.append('imagem', arquivo.file);
     torradaTimeout = setTimeout(() => {
         mostrarTorrada();
     }, 2500);
-    fetch(`${ENV.API_HOST}/upload/${ENV.CLIENTE_SHORT}`, {
-            method: 'post',
-            body: formData
-        }).then(resp => {
-            if (!resp.ok) throw new Error(resp.statusText);
-            atualizarResposta(true);
-        })
-        .catch(reason => atualizarResposta(false));
+    futch(`${ENV.API_HOST}/upload/${ENV.CLIENTE_SHORT}`, {
+        method: 'post',
+        body: formData
+    }, function (event) {
+        if (event.lengthComputable) {
+            const progress = event.loaded / event.total * 100;
+            progresso.style.setProperty('--progresso', progress);
+        }
+    }).then(resp => {
+        atualizarResposta(true);
+    })
+    .catch(reason => {
+        atualizarResposta(false);
+    });
 }
 
 const carregar = novamente => html`
@@ -123,7 +153,7 @@ const previewContent = isImg => html`${cache(
     `
 )}`;
 
-const logoCarregada = function() {
+const imagemCarregada = function () {
     this.classList.add('visivel');
 };
 
@@ -140,6 +170,12 @@ const pegarIdentidade = tipo => {
 
 function sendTemplate() {
     return html`
+    <div class="progresso-wrapper">
+        <svg class="upload-progresso" xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 34 34">
+            <circle cx="16" cy="16" r="15.9155" class="progress-bar__background" />
+            <circle cx="16" cy="16" r="15.9155" class="progress-bar__progress js-progress-bar" />
+        </svg>
+    </div>
     <div class="home">
         <div class="torrada">
             <p>O envio pode demorar alguns segundos, dependendo do tamanho do arquivo e da velocidade da sua internet.</p>
@@ -169,8 +205,9 @@ function sendTemplate() {
 function greetingTemplate(CONFIG) {
     return html`
     <div class="escondivel home">
-        <header class="logo-cliente" style="background-image: url(${pegarIdentidade('fundo')})">
-            <img src=${pegarIdentidade('logo')} @load=${logoCarregada}>
+        <header class="logo-cliente">
+            <img class="cover" src=${pegarIdentidade('fundo')} @load=${imagemCarregada}>
+            <img src=${pegarIdentidade('logo')} @load=${imagemCarregada}>
         </header>
         <div class="baixo unselectable">
             <p class="texto-intro">

@@ -9,16 +9,21 @@
     display: block;
     opacity: 0;
     transition: opacity .3s ease;
+    z-index: 2;
+}
+.home .logo-cliente > img.cover {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 1;
 }
 .home .logo-cliente > img.visivel {
     opacity: 1;
 }
-.home .logo-cliente.cover > img {
-    width: 100%;
-    height: 100%;
-}
 .home .logo-cliente {
-    padding: 0 3em;
+    position: relative;
+    padding: 3em;
+    box-sizing: border-box;
     display: flex;
     align-items: center;
     justify-content: center;
