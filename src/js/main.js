@@ -126,7 +126,7 @@ pronto(() => {
         .use('/ranking', rankingRouterGroup);
     router.listen();
 
-    document.addEventListener('imagem-lida', (event) => {
+    document.addEventListener('arquivo-lido', (event) => {
         CONFIG.temImg = true;
         router.push('/envio');
     });

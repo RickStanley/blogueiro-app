@@ -17,7 +17,8 @@ var arquivo = {
         file: null,
         nome: ''
     },
-    torradaTimeout = null;
+    torradaTimeout = null,
+    envioXHR = null;
 const respostaClass = {
     resposta: true,
     error: false
@@ -29,7 +30,7 @@ function lerArquivo() {
     arquivo.nome = this.files[0].name;
     arquivo.file = this.files[0];
     if (arquivo.arquivoBlob) {
-        document.dispatchEvent(new CustomEvent('imagem-lida'));
+        document.dispatchEvent(new CustomEvent('arquivo-lido'));
         arquivo.inputFile = this;
     }
 }
@@ -50,9 +51,10 @@ const atualizarResposta = houveSucesso => {
 function futch(url, opts, onProgress) {
     if (!opts) opts = {};
     return new Promise((res, rej) => {
-        var xhr = new XMLHttpRequest();
+        let xhr = null;
+        envioXHR = xhr = new XMLHttpRequest();
         xhr.open(opts.method || 'get', url);
-        for (var k in opts.headers || {})
+        for (const k in opts.headers || {})
             xhr.setRequestHeader(k, opts.headers[k]);
         xhr.onload = e => {
             if (e.target.status >= 200 && e.target.status <= 300) {
@@ -62,6 +64,9 @@ function futch(url, opts, onProgress) {
             }
         };
         xhr.onerror = rej;
+        xhr.onabort = e => {
+            rej('abortado');
+        };
         if (xhr.upload && onProgress) xhr.upload.onprogress = onProgress;
         xhr.send(opts.body);
     });
@@ -75,7 +80,7 @@ function enviar(event) {
     const formData = new FormData(this),
             progresso = document.querySelector('.progresso-wrapper');
     document.body.classList.add('enviando');
-    formData.append('imagem', arquivo.file);
+    formData.append('arquivo', arquivo.file);
     torradaTimeout = setTimeout(() => {
         mostrarTorrada();
     }, 2500);
@@ -91,8 +96,17 @@ function enviar(event) {
         atualizarResposta(true);
     })
     .catch(reason => {
-        atualizarResposta(false);
+        if (reason !== 'abortado') atualizarResposta(false);
+        else {
+            document.body.classList.remove('enviando');
+            clearTimeout(torradaTimeout);
+            progresso.style.setProperty('--progresso', 0);
+        }
     });
+}
+
+function abortarEnvio() {
+    envioXHR.abort();
 }
 
 const carregar = novamente => html`
@@ -112,7 +126,7 @@ function doneTemplate() {
             </div>
             <h1>${!respostaClass.error ? 'MUITO OBRIGADO!' : 'Oops :('}</h1>
             <hr>
-            <p>${!respostaClass.error ? 'A imagem foi enviada com sucesso!' : 'Ocorreu um erro ao tentar enviar sua foto, por favor tente novamente.'}</p>
+            <p>${!respostaClass.error ? `${arquivo.isImage ? 'A imagem foi enviada' : 'O vídeo foi enviado'} com sucesso!` : 'Ocorreu um erro ao tentar enviar seu arquivo, por favor tente novamente.'}</p>
         </header>
         ${carregar(true)}
         <a href="/" class="btn decorado">Início</a>
@@ -175,6 +189,7 @@ function sendTemplate() {
             <circle cx="16" cy="16" r="15.9155" class="progress-bar__background" />
             <circle cx="16" cy="16" r="15.9155" class="progress-bar__progress js-progress-bar" />
         </svg>
+        <button @click=${abortarEnvio} class="btn" type="button" style="margin-top: 1em;padding: 0.65em;font-size: 0.75rem;">CANCELAR</button>
     </div>
     <div class="home">
         <div class="torrada">
@@ -189,10 +204,10 @@ function sendTemplate() {
                         <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"/><path d="M12 6a3.5 3.5 0 0 0-3.5 3.5 1 1 0 0 0 2 0A1.5 1.5 0 1 1 12 11a1 1 0 0 0-1 1v2a1 1 0 0 0 2 0v-1.16A3.49 3.49 0 0 0 12 6z"/>
                         <circle cx="12" cy="17" r="1"/>
                     </svg>
-                    <span class="tooltiptext unselectable">Dicas: Quando foi feita? Onde foi feita? O que você gostaria que todos vissem nela? Por que ela é tão legal?</span>
+                    <span class="tooltiptext unselectable">${arquivo.isImage ? 'Dicas: Quando foi feita? Onde foi feita? O que você gostaria que todos vissem nela? Por que ela é tão legal?' : 'Dicas: Quando foi feito? Onde foi feito? O que você gostaria que todos vissem nele? Por que ele é tão legal?'}</span>
                 </div>
-                <textarea rows="4" id="descricao" name="descricao" spellcheck required placeholder="Conte um pouco sobre a foto"></textarea>
-                <label for="nome">Como você quer ser chamado?</label>
+                <textarea rows="4" id="descricao" name="descricao" spellcheck required placeholder="Conte um pouco sobre ${arquivo.isImage ? 'a foto' : 'o vídeo'}"></textarea>
+                <label for="nome">Como você quer ser chamado(a)?</label>
                 <input type="text" id="nome" name="nome" required>
                 <label for="instagram">Instagram</label>
                 <input title="Insira uma conta válida" pattern="(?:@)([A-Za-z0-9_](?:(?:[A-Za-z0-9_]|(?:\.(?!\.))){0,28}(?:[A-Za-z0-9_]))?)" @focus=${preventSelection} @keyup=${inputInsta} @keydown=${preventFirst} type="text" id="instagram" name="instagram" required value="@">
