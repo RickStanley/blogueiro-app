@@ -74,6 +74,17 @@ function futch(url, opts, onProgress) {
 
 function enviar(event) {
     event.preventDefault();
+    if (!navigator.onLine) {
+        document.dispatchEvent(new CustomEvent('mostrar-torrada', {
+            detail: {
+                texto: 'O dispositivo está sem internet.',
+                classes: {
+                    erro: true
+                }
+            }
+        }));
+        return;
+    }
     try {
         document.activeElement.blur();
     } catch (error) {}
@@ -82,8 +93,12 @@ function enviar(event) {
     document.body.classList.add('enviando');
     formData.append('arquivo', arquivo.file);
     torradaTimeout = setTimeout(() => {
-        mostrarTorrada();
-    }, 2500);
+        document.dispatchEvent(new CustomEvent('mostrar-torrada', {
+            detail: {
+                texto: 'O envio pode demorar alguns segundos, dependendo do tamanho do arquivo e da velocidade da sua internet.'
+            }
+        }))
+    }, 4000);
     futch(`${ENV.API_HOST}/upload/${ENV.CLIENTE_SHORT}`, {
         method: 'post',
         body: formData
@@ -133,14 +148,6 @@ function doneTemplate() {
     <div>`
 }
 
-function mostrarTorrada() {
-    const torrada = document.querySelector('.torrada');
-    torrada.setAttribute('visivel', 'true');
-    setTimeout(() => {
-        torrada.removeAttribute('visivel');
-    }, 4500);
-}
-
 const isBackspace = key => key === 'Backspace' || key === 8;
 
 const inputInsta = function () {
@@ -161,9 +168,9 @@ const previewContent = isImg => html`${cache(
     isImg
     ? html`<img src="${arquivo.arquivoBlob}" @load=${revoke}>`
     : html`
-        <video controls style="width: 100%;height: 100%;">
-            <source src="${arquivo.arquivoBlob}" @load=${revoke}>
-        </video>
+    <video controls style="width: 100%;height: 100%;">
+        <source src="${arquivo.arquivoBlob}" @load=${revoke}>
+    </video>
     `
 )}`;
 
@@ -192,9 +199,6 @@ function sendTemplate() {
         <button @click=${abortarEnvio} class="btn" type="button" style="margin-top: 1em;padding: 0.65em;font-size: 0.75rem;">CANCELAR</button>
     </div>
     <div class="home">
-        <div class="torrada">
-            <p>O envio pode demorar alguns segundos, dependendo do tamanho do arquivo e da velocidade da sua internet.</p>
-        </div>
         <header class="preview">${previewContent(arquivo.isImage)}</header>
         <div class="baixo">
             <form class="form-envio" @submit=${enviar}>

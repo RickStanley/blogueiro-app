@@ -1,6 +1,6 @@
 {
   "name": "blogueiro",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "Template de blogueiros.",
   "main": "index.js",
   "scripts": {
@@ -14,7 +14,7 @@
   "author": "Rick Stanley",
   "license": "ISC",
   "devDependencies": {
-    "parcel-bundler": "^1.12.0"
+    "parcel-bundler": "^1.12.3"
   },
   "dependencies": {
     "dom-locky": "^1.0.0",

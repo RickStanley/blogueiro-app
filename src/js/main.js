@@ -19,6 +19,7 @@ import rankingTemplate from "./ranking";
 import {
     lockyOn
 } from "dom-locky";
+import torradaTemplate from "./torrada.js";
 
 function hexParaRgb(hex) {
     var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
@@ -78,6 +79,7 @@ pronto(() => {
     const montadorPrincipal = é('#montador-principal'),
         lateral = é('#lateral'),
         montadorLateral = é('[data-role=montador-lateral]', lateral),
+        torradeira = é('#torradeira'),
         router = browserRouter(),
         rankingRouterGroup = routerGroup();
     const resetAny = () => {
@@ -133,6 +135,13 @@ pronto(() => {
     document.addEventListener('enviado', (event) => {
         router.push('/finalizado');
     });
+    document.addEventListener('mostrar-torrada', event => {
+        render(torradaTemplate(event.detail, true), torradeira);
+        setTimeout(() => {
+            render(torradaTemplate({}, false), torradeira);
+        }, 4500);
+    });
+    render(torradaTemplate({}, false), torradeira);
     // Manipulando links internos
     document.body.addEventListener('click', (evt) => {
         const target = evt.target;

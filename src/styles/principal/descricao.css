@@ -67,32 +67,6 @@
     text-align: left;
 }
 
-.home .torrada p {
-    margin: 0;
-    max-width: 19em;
-}
-
-.home .torrada {
-    background-color: #FEEFB3;
-    font-size: 0.75rem;
-    color: #704400;
-    box-shadow: 1px 1px 8px 0 rgba(79, 79, 79, 0.64);
-    box-sizing: border-box;
-    padding: 0.8em;
-    position: fixed;
-    border-radius: 5px;
-    display: inline-block;
-    right: 1em;
-    top: 1em;
-    transform: translateX(110%);
-    z-index: 5;
-    transition: transform .4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-}
-
-.home .torrada[visivel] {
-    transform: translateX(0%);
-}
-
 @media only screen and (orientation: landscape) {
     .home .preview {
         height: 37vh;
