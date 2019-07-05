@@ -13,11 +13,11 @@ Template de Blogueiro para clientes.
         Exemplo:
     ```json
     {
-        "CLIENTE": "Fermen.to",
-        "API_HOST": "https://blogueirinhos-api.dev.fermen.to",
+        "CLIENTE": "Cliente",
+        "API_HOST": "https://{seu_endpoint}",
         "COR": "#f8956c",
-        "CLIENTE_SHORT": "FRMNT",
-        "COMO_FUNCIONA": "Usando Blogueiros Fermen.to, vocês expõe as pessoas."
+        "CLIENTE_SHORT": "CL",
+        "COMO_FUNCIONA": "Usando Blogueiros {Cliente}, vocês expõe as pessoas."
     }
     ```
 2. Coloque as dependências de imagens (fundo e logo) na pasta `src/assets/`, com os respectivos nomes:
